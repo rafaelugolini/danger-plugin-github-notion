@@ -24,8 +24,6 @@ describe("dangerGithubNotion()", () => {
 
     dangerGithubNotion()
 
-    expect(global.message).toHaveBeenCalledWith(
-      "PR Title: My Test Title",
-    )
+    expect(global.message).toHaveBeenCalledWith("PR Title: My Test Title")
   })
 })

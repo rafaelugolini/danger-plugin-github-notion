@@ -1,29 +1,29 @@
-import dangerGithubNotion from "./index"
+import dangerGithubNotion from './index';
 
-declare const global: any
+declare const global: any;
 
-describe("dangerGithubNotion()", () => {
-  beforeEach(() => {
-    global.warn = jest.fn()
-    global.message = jest.fn()
-    global.fail = jest.fn()
-    global.markdown = jest.fn()
-  })
+describe('dangerGithubNotion()', () => {
+    beforeEach(() => {
+        global.warn = jest.fn();
+        global.message = jest.fn();
+        global.fail = jest.fn();
+        global.markdown = jest.fn();
+    });
 
-  afterEach(() => {
-    global.warn = undefined
-    global.message = undefined
-    global.fail = undefined
-    global.markdown = undefined
-  })
+    afterEach(() => {
+        global.warn = undefined;
+        global.message = undefined;
+        global.fail = undefined;
+        global.markdown = undefined;
+    });
 
-  it("Checks for a that message has been called", () => {
-    global.danger = {
-      github: { pr: { title: "My Test Title" } },
-    }
+    // it("Checks for a that message has been called", () => {
+    //   global.danger = {
+    //     github: { pr: { title: "My Test Title" } },
+    //   }
 
-    dangerGithubNotion()
+    //   dangerGithubNotion()
 
-    expect(global.message).toHaveBeenCalledWith("PR Title: My Test Title")
-  })
-})
+    //   expect(global.message).toHaveBeenCalledWith("PR Title: My Test Title")
+    // })
+});

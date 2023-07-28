@@ -18,10 +18,21 @@ At a glance:
 
 ```js
 // dangerfile.js
-import dangerGithubNotion from 'danger-plugin-danger-github-notion'
+import dangerGithubNotion from 'danger-plugin-danger-github-notion';
 
-dangerGithubNotion()
+dangerGithubNotion({
+    dbTasksId: 'UUID',
+    taskPrefix: 'TAS',
+    // optional
+    teams: [
+        {
+            org: 'OrgName',
+            team_slug: 'TeamName',
+        },
+    ],
+});
 ```
+
 ## Changelog
 
 See the GitHub [release history](https://github.com/rafaelugolini/danger-plugin-danger-github-notion/releases).

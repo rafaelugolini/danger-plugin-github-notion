@@ -35,6 +35,7 @@ const octokit = new Octokit({
 
 const REGEX_URL =
     /(http|https)\:\/\/([a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3})(\/\S*)?/gim;
+const REGEX_NOTION_ID_PARENT_VIEW = /.+p\=(\S{32})\?{0,1}.*/i;
 const REGEX_NOTION_ID = /.+\-(\S{32})\?{0,1}.*/i;
 
 async function validatePR(pr: GitHubPRDSL, config: Config) {
@@ -60,7 +61,7 @@ function getTaskByPR(pr: GitHubPRDSL, taskPrefix: string): string | undefined {
 
     // @ts-ignore-next-line: typescript is complaining about something it shouldn't
     if (taskId?.length > 1) {
-        fail('More than one task ID found in PR title');
+        fail('❌ More than one task ID found in PR title');
         process.exit(1);
     }
 
@@ -91,14 +92,26 @@ async function getNotionId(body: string): Promise<string> {
         for (const matchUrl of matchesUrl) {
             if (matchUrl.includes('notion.so')) {
                 const matchNotionId = matchUrl.match(REGEX_NOTION_ID);
+                const matchNotionIdParentView = matchUrl.match(
+                    REGEX_NOTION_ID_PARENT_VIEW,
+                );
                 if (matchNotionId) {
                     notionIds.push(transformNotionId(matchNotionId[1]));
+                } else if (matchNotionIdParentView) {
+                    notionIds.push(
+                        transformNotionId(matchNotionIdParentView[1]),
+                    );
                 }
             }
         }
     }
     if (notionIds.length === 0) {
-        fail('No Notion link found in PR body');
+        fail(
+            '❌ No Notion link found in PR body. Please add one of the following methods to link the PR to a Notion task:\n' +
+                '- Add a Notion Project link in the PR body\n' +
+                '- Add a Notion Task link in the PR body\n' +
+                '- Add a Notion Task ID in the PR title',
+        );
         process.exit(1);
     } else if (notionIds.length > 1) {
         fail('More than one Notion link found in PR body');
@@ -177,8 +190,6 @@ async function addTaskIDToPR(pr: GitHubPRDSL, taskId: string) {
 export default async function plugin(config: Config) {
     const title = danger.github.pr.title;
     const body = danger.github.pr.body;
-    message(`PR Title: ${title}`);
-    message(`PR Body: ${body}`);
 
     // team member
     const validate = await validatePR(danger.github.pr, config);
@@ -187,7 +198,7 @@ export default async function plugin(config: Config) {
         process.exit(0);
     }
 
-    const taskId = getTaskByPR(danger.github.pr, config.taskPrefix);
+    let taskId = getTaskByPR(danger.github.pr, config.taskPrefix);
     // task id is already in the title
     if (taskId) {
         message(`✅ task id: ${taskId}`);
@@ -196,7 +207,6 @@ export default async function plugin(config: Config) {
 
     // get uuid from notion link
     const notionId = await getNotionId(body);
-    message(`notion id: ${notionId}`);
 
     // get the page from uuid
     const page = await notion.pages.retrieve({ page_id: notionId });
@@ -206,11 +216,12 @@ export default async function plugin(config: Config) {
     if (page['parent'].database_id == config.dbTasksId) {
         parentTaskId = notionId;
     }
-    const task_id = await createTask(
+    taskId = await createTask(
         danger.github.pr,
         config.dbTasksId,
         notionId,
         parentTaskId,
     );
-    await addTaskIDToPR(danger.github.pr, task_id);
+    await addTaskIDToPR(danger.github.pr, taskId);
+    message(`✅ task id: ${taskId}`);
 }

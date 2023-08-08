@@ -1,4 +1,5 @@
 import { Client } from '@notionhq/client';
+import { GetPageResponse } from '@notionhq/client/build/src/api-endpoints';
 import { GitHubPRDSL } from 'danger';
 import { DangerDSLType } from 'danger/distribution/dsl/DangerDSL';
 import { Octokit } from 'octokit';
@@ -209,7 +210,13 @@ export default async function plugin(config: Config) {
     const notionId = await getNotionId(body);
 
     // get the page from uuid
-    const page = await notion.pages.retrieve({ page_id: notionId });
+    let page: GetPageResponse;
+    try {
+        page = await notion.pages.retrieve({ page_id: notionId });
+    } catch (error) {
+        fail('❌ Notion link is not valid');
+        process.exit(1);
+    }
 
     // add parent task id if database is from tasks
     let parentTaskId: string | undefined = undefined;

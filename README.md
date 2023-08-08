@@ -22,6 +22,8 @@ import dangerGithubNotion from 'danger-plugin-danger-github-notion';
 
 dangerGithubNotion({
     dbTasksId: 'UUID',
+    // we require a task prefix to make it easier to detect the task
+    // and avoid false positives
     taskPrefix: 'TAS',
     // optional
     teams: [

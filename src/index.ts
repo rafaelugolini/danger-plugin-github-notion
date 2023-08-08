@@ -23,14 +23,14 @@ interface Config {
 }
 
 const NOTION_API_TOKEN = process.env.NOTION_API_TOKEN;
-const GITHUB_ACCESS_TOKEN = process.env.GITHUB_ACCESS_TOKEN;
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 // Initializing a client
 const notion = new Client({
     auth: NOTION_API_TOKEN,
 });
 const octokit = new Octokit({
-    auth: GITHUB_ACCESS_TOKEN,
+    auth: GITHUB_TOKEN,
 });
 
 const REGEX_URL =
@@ -107,9 +107,9 @@ async function getNotionId(body: string): Promise<string> {
     }
     if (notionIds.length === 0) {
         fail(
-            '❌ No Notion link found in PR body. Please add one of the following methods to link the PR to a Notion task:\n' +
-                '- Add a Notion Project link in the PR body\n' +
-                '- Add a Notion Task link in the PR body\n' +
+            '❌ No Notion link found in PR body. Please add one of the following methods to link the PR to a Notion task:<br />' +
+                '- Add a Notion Project link in the PR body<br />' +
+                '- Add a Notion Task link in the PR body<br />' +
                 '- Add a Notion Task ID in the PR title',
         );
         process.exit(1);

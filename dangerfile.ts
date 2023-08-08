@@ -1,13 +1,6 @@
-import { message, danger } from "danger";
+import dangerPluginNotion from './src';
 
-const modifiedMD = danger.git.modified_files.join("- ");
-message("Changed Files in this PR: \n - " + modifiedMD);
-
-function messagePR() {
-  const title = danger.github.pr.title;
-  const body = danger.github.pr.body;
-  message(`PR Title: ${title}`);
-  message(`PR Body: ${body}`);
-}
-
-messagePR();
+dangerPluginNotion({
+    dbTasksId: 'f444ee3e-d6be-49d0-b60e-4b9a0dd6458c',
+    taskPrefix: 'TAS',
+});

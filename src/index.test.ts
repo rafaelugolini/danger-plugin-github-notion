@@ -17,13 +17,11 @@ describe('dangerGithubNotion()', () => {
         global.markdown = undefined;
     });
 
-    // it("Checks for a that message has been called", () => {
-    //   global.danger = {
-    //     github: { pr: { title: "My Test Title" } },
-    //   }
-
-    //   dangerGithubNotion()
-
-    //   expect(global.message).toHaveBeenCalledWith("PR Title: My Test Title")
-    // })
+    it('Checks for a that message has been called', () => {
+        //   global.danger = {
+        //     github: { pr: { title: "My Test Title" } },
+        //   }
+        //   dangerGithubNotion()
+        //   expect(global.message).toHaveBeenCalledWith("PR Title: My Test Title")
+    });
 });

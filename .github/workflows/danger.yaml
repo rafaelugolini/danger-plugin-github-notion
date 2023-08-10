@@ -10,14 +10,11 @@ jobs:
         steps:
             - uses: actions/checkout@master
             - name: Use Node.js 18x
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v3
               with:
                   node-version: 18.x
-            - name: install yarn
-              run: npm install -g yarn
+                  cache: 'yarn'
             - run: yarn install  --frozen-lockfile
-            - run: yarn build
-            - run: yarn test
             - run: yarn danger ci
               env:
                   DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,5 +1,5 @@
 {
-    "name": "danger-plugin-danger-github-notion",
+    "name": "danger-plugin-github-notion",
     "description": "This plugin connects github PRs into Notion Projects",
     "author": {
         "name": "Rafael Ugolini",
@@ -7,12 +7,12 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/rafaelugolini/danger-plugin-danger-github-notion.git"
+        "url": "https://github.com/rafaelugolini/danger-plugin-github-notion.git"
     },
     "bugs": {
-        "url": "https://github.com/rafaelugolini/danger-plugin-danger-github-notion/issues"
+        "url": "https://github.com/rafaelugolini/danger-plugin-github-notion/issues"
     },
-    "homepage": "https://github.com/rafaelugolini/danger-plugin-danger-github-notion#readme",
+    "homepage": "https://github.com/rafaelugolini/danger-plugin-github-notion#readme",
     "keywords": [
         "danger",
         "danger-plugin",
@@ -20,7 +20,11 @@
     ],
     "version": "0.0.1",
     "main": "dist/index.js",
-    "types": "types/index.d.ts",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "types"
+    ],
     "scripts": {
         "precommit": "lint-staged",
         "commit": "git-cz",

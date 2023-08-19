@@ -176,15 +176,33 @@ async function createTask(
     // [Task ID] comes null from the API, so we need to retrieve the page again
     res = await notion.pages.retrieve({ page_id: res['id'] });
     const { unique_id } = res['properties']['Task ID'];
+
+    // update the page with the task id
+    const taskId = `${unique_id.prefix}-${unique_id.number}`;
+    await notion.pages.update({
+        page_id: res['id'],
+        properties: {
+            'Task name': {
+                title: [
+                    {
+                        text: {
+                            content: `[${taskId}] ${pr.title}`,
+                        },
+                    },
+                ],
+            },
+        },
+    });
+
     return `${unique_id.prefix}-${unique_id.number}`;
 }
 
-async function addTaskIDToPR(pr: GitHubPRDSL, taskId: string) {
+async function updatePrTitle(pr: GitHubPRDSL, title: string) {
     await octokit.rest.pulls.update({
         owner: pr.base.repo.owner.login,
         repo: pr.base.repo.name,
         pull_number: pr.number,
-        title: `[${taskId}] ${pr.title}`,
+        title,
     });
 }
 
@@ -229,6 +247,7 @@ export default async function plugin(config: Config) {
         notionId,
         parentTaskId,
     );
-    await addTaskIDToPR(danger.github.pr, taskId);
+    const titleWithTaskId = `[${taskId}] ${title}`;
+    await updatePrTitle(danger.github.pr, titleWithTaskId);
     message(`✅ task id: ${taskId}`);
 }

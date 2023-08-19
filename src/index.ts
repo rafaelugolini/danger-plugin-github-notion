@@ -164,6 +164,12 @@ async function createTask(
                     },
                 ],
             },
+            icon: {
+                type: 'external',
+                external: {
+                    url: 'https://blog.crisp.se/wp-content/uploads/2023/05/pull-request.png',
+                },
+            },
         },
     };
     if (parentTaskId) {

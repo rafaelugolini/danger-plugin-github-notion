@@ -133,6 +133,12 @@ async function createTask(
             type: 'database_id',
             database_id: dbTasksId,
         },
+        icon: {
+            type: 'external',
+            external: {
+                url: 'https://blog.crisp.se/wp-content/uploads/2023/05/pull-request.png',
+            },
+        },
         properties: {
             'Task name': {
                 title: [
@@ -163,12 +169,6 @@ async function createTask(
                         id: projectId,
                     },
                 ],
-            },
-            icon: {
-                type: 'external',
-                external: {
-                    url: 'https://blog.crisp.se/wp-content/uploads/2023/05/pull-request.png',
-                },
             },
         },
     };
